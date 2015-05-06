@@ -6,7 +6,7 @@ BlockTNTx5::BlockTNTx5(int id, std::string const& texture, std::string const& de
 	init();
 	setNameId(desc);
 	setCategory(3);
-	sideIcon = getTextureUVCoordinateSet(texture, 0);
+	tex = getTextureUVCoordinateSet(texture, 0);
 	topIcon = getTextureUVCoordinateSet(texture, 1);
 	bottomIcon = getTextureUVCoordinateSet(texture, 2);
 	Tile::solid[id] = false;
@@ -22,7 +22,7 @@ const TextureUVCoordinateSet& BlockTNTx5::getTexture(signed char side) {
 		return topIcon;
 		break;
 	default:
-		return sideIcon;
+		return tex;
 	}
 }
 
