@@ -7,7 +7,6 @@
 #include <map>
 #include <memory>
 
-#include "mcpe/world/item/TileItem.h"
 #include "mcpe/world/level/tile/Tile.h"
 #include "mcpe/world/item/Item.h"
 #include "mcpe/world/level/Level.h"
@@ -16,30 +15,24 @@
 #include "tnt/BlockTNTx5.h"
 
 static void (*_Tile_initTiles)();
-static void (*_Item_initCreativeItems)();
-static std::string (*_I18n_get)(std::string const&,std::vector<std::string,std::allocator<std::string>> const&);
-static void(*_Level_onSourceCreated)(Level*, TileSource*);
-
-void initTntTileItems() {
-	TileItem* TNTx5Item = new TileItem(BlockTNTx5::_TNTx5Id - 0x100);
-}
-
 static void Tile_initTiles() {
 	_Tile_initTiles();
-	BlockTNTx5* blockTNTx5 = new BlockTNTx5(BlockTNTx5::_TNTx5Id, "TNTx5", "blockTNTx5");
-	initTntTileItems();
+	BlockTNTx5::block_tntx5 = (Tile*) new BlockTNTx5(195);
 }
 
+static void (*_Item_initCreativeItems)();
 static void Item_initCreativeItems() {
 	_Item_initCreativeItems();
-	Item::addCreativeItem(Tile::tiles[BlockTNTx5::_TNTx5Id], 0);
+	Item::addCreativeItem(BlockTNTx5::block_tntx5, 0);
 }
 
-static std::string I18n_get(std::string const& key,std::vector<std::string,std::allocator<std::string>> const& a) {
+static std::string (*_I18n_get)(std::string const&, std::vector<std::string,std::allocator<std::string>> const&);
+static std::string I18n_get(std::string const& key, std::vector<std::string,std::allocator<std::string>> const& a) {
 	if(key == "tile.blockTNTx5.name") return "TNTx5";
 	return _I18n_get(key, a);
 };
 
+static void(*_Level_onSourceCreated)(Level*, TileSource*);
 static void Level_onSourceCreated(Level* level, TileSource* ts) {
 	_Level_onSourceCreated(level, ts);
 	TileSource::inst = ts;

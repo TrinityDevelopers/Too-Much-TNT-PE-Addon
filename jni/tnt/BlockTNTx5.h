@@ -10,12 +10,13 @@
 #include "mcpe/world/material/Material.h"
 #include "mcpe/world/item/ItemInstance.h"
 #include "mcpe/world/item/Item.h"
+#include "mcpe/world/item/TileItem.h"
 
 class BlockTNTx5 : public Tile {
 public:
-	static int _TNTx5Id;
+	static Tile* block_tntx5;
 
-	BlockTNTx5(int, std::string const&, std::string const&);
+	BlockTNTx5(int);
 
 	virtual const TextureUVCoordinateSet& getTexture(signed char);
 	virtual void neighborChanged(TileSource*, int, int, int, int, int, int);
@@ -23,9 +24,9 @@ public:
 	virtual bool use(Player*, int, int, int);
 	virtual void wasExploded(TileSource*, int, int, int);
 	virtual void spawnPrimed(TileSource*, int, int, int, int);
-	virtual void destroy(TileSource*, int, int, int, int);
 
 protected:
+	Tile* super;
 	TextureUVCoordinateSet bottomIcon;
 	TextureUVCoordinateSet topIcon;
 };
