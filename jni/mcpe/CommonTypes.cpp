@@ -1,27 +1,43 @@
 #include "CommonTypes.h"
 
-//message from byteandahalf: I made all this stuff 'cause MCPE TileID is too hard D:
-//message from me: I agree! :D
-//credit for this code goes to byteandahalf
-
-bool TileID::operator==(unsigned char v) {
-    return this->value == v;
+BlockID::BlockID() {
+	value = 0;
 }
 
-bool TileID::operator==(TileID v) {
-    return this->value == v.value;
+BlockID::BlockID(unsigned char other) {
+	value = other;
 }
 
-TileID& TileID::operator=(const unsigned char& v) {
-    this->value = v;
-    return *this;
+BlockID::BlockID(const BlockID& other) {
+	value = other.value;
 }
 
-TileID::operator unsigned char() {
-    return this->value;
+bool BlockID::operator==(unsigned char other) {
+	return value == other;
 }
 
-FullTile::FullTile(TileID tile, DataID dat) {
-	this->id = tile;
-	this->data = dat;
+bool BlockID::operator==(BlockID other) {
+	return value == other.value;
+}
+
+BlockID& BlockID::operator=(const unsigned char& other) {
+	value = other;
+	return *this;
+}
+
+BlockID::operator unsigned char() {
+	return value;
+}
+
+BlockID::operator int() {
+	return value;
+}
+
+FullBlock::FullBlock(BlockID id, DataID data) {
+	this->id = id;
+	this->data = data;
+}
+
+FullBlock::operator unsigned char() {
+	return id;
 }

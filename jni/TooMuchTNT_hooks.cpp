@@ -4,45 +4,59 @@
 #include <stdlib.h>
 #include <Substrate.h>
 #include <string>
-#include <map>
 #include <memory>
 
-#include "mcpe/world/level/tile/Tile.h"
+#include "mcpe/world/level/block/Block.h"
 #include "mcpe/world/item/Item.h"
-#include "mcpe/world/level/Level.h"
-#include "mcpe/world/level/TileSource.h"
 
-#include "tnt/BlockTNTx5.h"
+#include "TooMuchTNT/TooMuchTNT.h"
 
-static void (*_Tile_initTiles)();
-static void Tile_initTiles() {
-	_Tile_initTiles();
-	BlockTNTx5::block_tntx5 = (Tile*) new BlockTNTx5(195);
+void (*_Block$initBlocks)();
+void Block$initBlocks() {
+	_Block$initBlocks();
+	
+	TooMuchTNT::initBlocks();
 }
 
-static void (*_Item_initCreativeItems)();
-static void Item_initCreativeItems() {
-	_Item_initCreativeItems();
-	Item::addCreativeItem(BlockTNTx5::block_tntx5, 0);
+
+void (*_Item$initCreativeItems)();
+void Item$initCreativeItems() {
+	_Item$initCreativeItems();
+
+	TooMuchTNT::registerCreativeItems();
 }
 
-static std::string (*_I18n_get)(std::string const&, std::vector<std::string,std::allocator<std::string>> const&);
-static std::string I18n_get(std::string const& key, std::vector<std::string,std::allocator<std::string>> const& a) {
-	if(key == "tile.blockTNTx5.name") return "TNTx5";
-	return _I18n_get(key, a);
-};
+Block* (*_Block$Block1)(Block*, const std::string&, int, const Material&);
+Block* Block$Block1(Block* block, const std::string& name, int id, const Material& material) {
+	Block::mBlocksHook[id] = block;
+	
+	return _Block$Block1(block, name, id, material);
+}
 
-static void(*_Level_onSourceCreated)(Level*, TileSource*);
-static void Level_onSourceCreated(Level* level, TileSource* ts) {
-	_Level_onSourceCreated(level, ts);
-	TileSource::inst = ts;
+Block* (*_Block$Block2)(Block*, const std::string&, int, TextureUVCoordinateSet, const Material&);
+Block* Block$Block2(Block* block, const std::string& name, int id, TextureUVCoordinateSet tex, const Material& material) {
+	Block::mBlocksHook[id] = block;
+	
+	return _Block$Block2(block, name, id, tex, material);
+}
+
+Block* (*_Block$Block3)(Block*, const std::string&, int, const std::string&, const Material&);
+Block* Block$Block3(Block* block, const std::string& name, int id, const std::string& tex, const Material& material) {
+	if(tex != "missing_tile")
+		Block::mBlocksHook[id] = block;
+	
+	return _Block$Block3(block, name, id, tex, material);
 }
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
-	void* I18n_get = dlsym(RTLD_DEFAULT, "_ZN4I18n3getERKSsRKSt6vectorISsSaISsEE");
-    MSHookFunction((void*) &Tile::initTiles, (void*) &Tile_initTiles, (void**) &_Tile_initTiles);
-	MSHookFunction((void*) &Item::initCreativeItems, (void*) &Item_initCreativeItems, (void**) &_Item_initCreativeItems);
-	MSHookFunction(I18n_get, (void*) &I18n_get, (void**) &_I18n_get);
-	MSHookFunction((void*)&Level::onSourceCreated, (void*)&Level_onSourceCreated, (void**) &_Level_onSourceCreated);
-    return JNI_VERSION_1_2;
+	void* BlockConstructor1 = dlsym(RTLD_DEFAULT, "_ZN5BlockC2ERKSsiRK8Material");
+	void* BlockConstructor2 = dlsym(RTLD_DEFAULT, "_ZN5BlockC2ERKSsi22TextureUVCoordinateSetRK8Material");
+	void* BlockConstructor3 = dlsym(RTLD_DEFAULT, "_ZN5BlockC2ERKSsiS1_RK8Material");
+	MSHookFunction((void*) &Block::initBlocks, (void*) &Block$initBlocks, (void**) &_Block$initBlocks);
+	MSHookFunction((void*) &Item::initCreativeItems, (void*) &Item$initCreativeItems, (void**) &_Item$initCreativeItems);
+	MSHookFunction(BlockConstructor1, (void*) &Block$Block1, (void**) &_Block$Block1);
+	MSHookFunction(BlockConstructor2, (void*) &Block$Block2, (void**) &_Block$Block2);
+	MSHookFunction(BlockConstructor3, (void*) &Block$Block3, (void**) &_Block$Block3);
+	
+	return JNI_VERSION_1_2;
 }

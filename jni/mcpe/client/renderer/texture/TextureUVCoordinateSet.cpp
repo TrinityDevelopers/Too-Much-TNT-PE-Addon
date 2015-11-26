@@ -1,17 +1,28 @@
 #include "TextureUVCoordinateSet.h"
 
-// Make my own TextureUVCoordinateSet fuctions 4 eezy rendering abilities :D
-
-TextureUVCoordinateSet::TextureUVCoordinateSet() {
-}
-
-TextureUVCoordinateSet::TextureUVCoordinateSet(float minU, float maxU, float minV, float maxV, int width, int height) {
-	setUV(minU, maxU, minV, maxV);
+TextureUVCoordinateSet::TextureUVCoordinateSet(float minU, float minV, float maxU, float maxV, int width, int height) {
+	setUV(minU, minV, maxU, maxV);
 	this->width = width;
 	this->height = height;
 }
 
-void TextureUVCoordinateSet::setUV(float minU, float maxU, float minV, float maxV) {
+float TextureUVCoordinateSet::getMinU() {
+	return minU;
+}
+
+float TextureUVCoordinateSet::getMinV() {
+	return minV;
+}
+
+float TextureUVCoordinateSet::getMaxU() {
+	return maxU;
+}
+
+float TextureUVCoordinateSet::getMaxV() {
+	return maxV;
+}
+
+void TextureUVCoordinateSet::setUV(float minU, float minV, float maxU, float maxV) {
 	this->minU = minU;
 	this->maxU = maxU;
 	this->minV = minV;

@@ -14,7 +14,7 @@
     <!-- metadata specifying the library name. must match Android.mk.-->
     <meta-data android:name="net.zhuoweizhang.mcpelauncher.api.nativelibname"
         android:value="com.trinitydevelopers.toomuchtnt.mcpeaddon"/>
-	<meta-data android:name="net.zhuoweizhang.mcpelauncher.api.targetmcpeversion" android:value="0.11.0"/>
+	<meta-data android:name="net.zhuoweizhang.mcpelauncher.api.targetmcpeversion" android:value="0.13.0"/>
     </application>
 
 </manifest> 

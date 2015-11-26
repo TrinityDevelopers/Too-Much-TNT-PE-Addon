@@ -1,46 +1,35 @@
 #pragma once
-
 #include <stdint.h>
-
-//all this stuffs made by @byteandahalf
 
 typedef uint_fast8_t DataID;
 typedef int_fast8_t FacingID;
 
-struct TileID {
-    unsigned char value;
+struct BlockID {
+	unsigned char value;
+	static const BlockID AIR;
 
-    TileID() {
-        this->value = 1;
-    }
+	BlockID();
+	BlockID(unsigned char);
+	BlockID(const BlockID&);
 
-    TileID(unsigned char val) {
-        this->value = val;
-    }
-
-    TileID(TileID const& other) {
-		this->value = other.value;
-	}
-
-    static const TileID AIR;
-
-    bool operator==(unsigned char);
-    bool operator==(TileID);
-    TileID& operator=(const unsigned char&);
-    operator unsigned char();
+	bool operator==(unsigned char);
+	bool operator==(BlockID);
+	BlockID& operator=(const unsigned char&);
+	operator unsigned char();
+	operator int();
 };
 
-class FullTile {
-public:
-	static const FullTile AIR;
+struct FullBlock {
+	static const FullBlock AIR;
 
-	TileID id;
+	BlockID id;
 	DataID data;
 
-	FullTile(TileID, DataID);
+	FullBlock(BlockID, DataID);
+	operator unsigned char();
 };
 
 struct Brightness {
-    static uint_fast8_t MIN;
-    static uint_fast8_t MAX;
+	static uint_fast8_t MIN;
+	static uint_fast8_t MAX;
 };
