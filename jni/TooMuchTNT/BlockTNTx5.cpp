@@ -12,8 +12,8 @@ BlockTNTx5::BlockTNTx5(std::string name, int id) :
 	setDestroyTime(0.0F);
 	setSoundType(SOUND_GRASS);
 	
-	topIcon = getTextureUVCoordinateSet("TNTx5", 2);
 	bottomIcon = getTextureUVCoordinateSet("TNTx5", 1);
+	topIcon = getTextureUVCoordinateSet("TNTx5", 2);
 }
 
 const TextureUVCoordinateSet& BlockTNTx5::getTexture(signed char side) {
