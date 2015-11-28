@@ -1,6 +1,7 @@
 #include "BlockTNTx5.h"
 
 #include "mcpe/leveledit.h"
+#include "mcpe/world/entity/player/Player.h"
 
 BlockTNTx5::BlockTNTx5(std::string name, int id) : 
 	Block(name, id, "TNTx5", Material::getMaterial(MaterialType::EXPLOSIVE)) {
@@ -16,14 +17,16 @@ BlockTNTx5::BlockTNTx5(std::string name, int id) :
 const TextureUVCoordinateSet& BlockTNTx5::getTexture(signed char side) {
 	return side == 1 ? topIcon : (side == 0 ? bottomIcon : texture);
 }
-/*
-void BlockTNTx5::neighborChanged(TileSource* ts, int i1, int i2, int i3, int i4, int i5, int i6) { }
 
-int BlockTNTx5::getResourceCount(Random *rand) {
+int BlockTNTx5::getResourceCount(Random& rand, int i1, int i2) {
 	return 1;
 }
 
-bool BlockTNTx5::use(Player* player, int x, int y, int z) {
+bool BlockTNTx5::use(Player& player, const BlockPos& pos) {
+	return Block::use(player, pos);
+}
+
+/*bool BlockTNTx5::use(Player* player, int x, int y, int z) {
 	if(player->getCarriedItem() != NULL && player->getCarriedItem()->item == Item::flintAndSteel) {
 		player->getCarriedItem()->hurtAndBreak(1, (Mob*)player);
 		//this->spawnPrimed(TileSource::inst, x, y, z, 1);
