@@ -16,6 +16,7 @@ class Brightness;
 class CreativeItemCategory;
 class TextureAtlas;
 #include "../../../client/renderer/texture/TextureUVCoordinateSet.h"
+#include "../../../client/renderer/texture/TextureAtlasTextureItem.h"
 #include "../../phys/AABB.h"
 #include "../../../CommonTypes.h"
 #include "entity/BlockEntityType.h"
@@ -189,6 +190,7 @@ public:
 	void addAABB(const AABB&, const AABB*, std::vector<AABB, std::allocator<AABB>>&);
 	void popResource(BlockSource&, const BlockPos&, const ItemInstance&);
 	TextureUVCoordinateSet getTextureUVCoordinateSet(const std::string&, int);
+	TextureAtlasTextureItem getTestureItem(const std::string&);
 	Block* setCategory(CreativeItemCategory);
 	void setSolid(bool);
 	bool isSolid() const;
