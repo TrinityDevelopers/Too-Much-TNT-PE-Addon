@@ -2,6 +2,8 @@
 
 #include "mcpe/leveledit.h"
 #include "mcpe/world/entity/player/Player.h"
+#include "mcpe/world/item/Item.h"
+#include "mcpe/world/item/ItemInstance.h"
 
 BlockTNTx5::BlockTNTx5(std::string name, int id) : 
 	Block(name, id, "TNTx5", Material::getMaterial(MaterialType::EXPLOSIVE)) {
@@ -23,6 +25,12 @@ int BlockTNTx5::getResourceCount(Random& rand, int i1, int i2) {
 }
 
 bool BlockTNTx5::use(Player& player, const BlockPos& pos) {
+	ItemInstance* selected = player.getSelectedItem();
+	if(selected && Item::mFlintAndSteel && selected->item == Item::mFlintAndSteel) {
+		BlockSource& region = player.getRegion();
+		region.setBlock(pos, BlockID::AIR, 11);
+		return true;
+	}
 	return Block::use(player, pos);
 }
 

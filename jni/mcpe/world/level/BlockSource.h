@@ -14,6 +14,7 @@ public:
 	DataID getData(const BlockPos&);
 	Material& getMaterial(const BlockPos&);
 	bool setBlockAndData(const BlockPos&, FullBlock, int);
+	bool setBlock(const BlockPos&, BlockID, int);
 	void removeBlock(const BlockPos&);
 	BlockEntity* getBlockEntity(const BlockPos&);
 };

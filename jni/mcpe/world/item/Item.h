@@ -100,4 +100,5 @@ public:
 	static void addCreativeItem(short, short);
 
 	static Item* mBucket; // 325
+	static Item* mFlintAndSteel;
 };

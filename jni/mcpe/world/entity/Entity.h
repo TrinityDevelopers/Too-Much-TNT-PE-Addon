@@ -162,6 +162,7 @@ public:
 	virtual void onBlockCollision(int);
 	
 	void _init();
+	BlockSource& getRegion();
 };
 
 typedef std::vector<Entity*> EntityList;

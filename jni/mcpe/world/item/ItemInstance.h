@@ -2,6 +2,7 @@
 class CompoundTag;
 class Item;
 class Block;
+class Mob;
 
 class ItemInstance {
 public:
@@ -22,4 +23,5 @@ public:
 	const ItemInstance& operator=(const ItemInstance&);
 	
 	bool isLiquidClipItem();
+	void hurtAndBreak(int, Mob*);
 };
