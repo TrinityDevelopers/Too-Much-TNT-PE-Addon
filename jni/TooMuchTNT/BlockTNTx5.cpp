@@ -3,15 +3,15 @@
 #include "mcpe/leveledit.h"
 #include "mcpe/world/entity/player/Player.h"
 
-BlockTNTx5::BlockTNTx5(std::string name, int id) : 
-	Block(name, id, "TNTx5", Material::getMaterial(MaterialType::EXPLOSIVE)) {
+BlockTNTx5::BlockTNTx5(std::string asset, int id) : 
+	Block(asset, id, asset, Material::getMaterial(MaterialType::EXPLOSIVE)) {
 		
 	creativeCategory = 3;
 	setDestroyTime(0.0F);
 	setSoundType(SOUND_GRASS);
 	
-	bottomIcon = getTextureUVCoordinateSet("TNTx5", 1);
-	topIcon = getTextureUVCoordinateSet("TNTx5", 2);
+	bottomIcon = getTextureUVCoordinateSet(asset, 1);
+	topIcon = getTextureUVCoordinateSet(asset, 2);
 }
 
 const TextureUVCoordinateSet& BlockTNTx5::getTexture(signed char side) {
