@@ -8,7 +8,7 @@ public:
 	static void initBlocks();
 	static void registerBlocks();
 	static void registerBlock(Block*);
-	static int getNewRandomID();
+	static int getNewRandomBlockID();
 	
 	static void registerCreativeItems();
 };

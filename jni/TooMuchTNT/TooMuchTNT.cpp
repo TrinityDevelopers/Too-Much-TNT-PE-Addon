@@ -9,7 +9,7 @@
 Block* TooMuchTNT::TNTx5;
 
 void TooMuchTNT::initBlocks() {
-	TNTx5 = new BlockTNTx5("TNTx5", getNewRandomID());
+	TNTx5 = new BlockTNTx5("TNTx5", getNewRandomBlockID());
 	
 	registerBlocks();
 }
@@ -25,7 +25,7 @@ void TooMuchTNT::registerBlock(Block* block) {
 	Item::mItems[block->blockId] = new BlockItem(block->getDescriptionId(), block->blockId - 0x100);
 }
 
-int TooMuchTNT::getNewRandomID() {
+int TooMuchTNT::getNewRandomBlockID() {
 	int id = 0;
 	while(Block::mBlocksHook[id] != NULL) {
 		if(id < 256)
