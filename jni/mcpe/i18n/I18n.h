@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "Localization.h"
 
 class I18n {
