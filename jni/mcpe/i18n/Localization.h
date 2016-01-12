@@ -4,5 +4,5 @@
 
 class Localization {
 public:
-  Localization(const std::string&);
+        Localization(const std::string&);
 };
