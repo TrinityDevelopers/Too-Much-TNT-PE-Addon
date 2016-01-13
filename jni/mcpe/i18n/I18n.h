@@ -5,6 +5,7 @@
 class I18n {
 public:
 	static Localization mCurrentLanguage;
+	static std::string languages[256];
 	
 	static std::string get(const std::string&);
 	static Localization getCurrentLanguage();
