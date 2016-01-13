@@ -9,8 +9,10 @@
 
 #include "mcpe/world/level/block/Block.h"
 #include "mcpe/world/item/Item.h"
+#include "mcpe/i18n/I18n.h"
 
 #include "TooMuchTNT/TooMuchTNT.h"
+#include "TooMuchTNT/i18n/TMTMultilanguage.h"
 
 void (*_Block$initBlocks)();
 void Block$initBlocks() {
@@ -26,6 +28,16 @@ void Item$initCreativeItems() {
 
 	TooMuchTNT::registerCreativeItems();
 }
+
+static std::string (*_I18n$get)(std::string const&);
+static std::string I18n$get(std::string const& key) {
+	if(key == "language.code")
+		return _I18n$get(key);
+	std::string retval = TMTMultilanguage::get(key);
+	if(retval.compare("") == 0)
+		return _I18n$get(key);
+	return retval;
+};
 
 Block* (*_Block$Block1)(Block*, const std::string&, int, const Material&);
 Block* Block$Block1(Block* block, const std::string& name, int id, const Material& material) {
@@ -52,6 +64,7 @@ Block* Block$Block3(Block* block, const std::string& name, int id, const std::st
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	MSHookFunction((void*) &Block::initBlocks, (void*) &Block$initBlocks, (void**) &_Block$initBlocks);
 	MSHookFunction((void*) &Item::initCreativeItems, (void*) &Item$initCreativeItems, (void**) &_Item$initCreativeItems);
+	MSHookFunction((void*) &I18n::get, (void*) &I18n$get, (void**) &_I18n$get);
 	
 	void* BlockConstructor1 = dlsym(RTLD_DEFAULT, "_ZN5BlockC2ERKSsiRK8Material");
 	MSHookFunction(BlockConstructor1, (void*) &Block$Block1, (void**) &_Block$Block1);

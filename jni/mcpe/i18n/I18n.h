@@ -1,14 +1,8 @@
 #pragma once
 
-#include "Localization.h"
+#include <string>
 
 class I18n {
-public:
-	static Localization mCurrentLanguage;
-	static std::string languages[14];
-	
+public:	
 	static std::string get(const std::string&);
-	static Localization getCurrentLanguage();
-	static Localization getLocaleFor(const std::string&);
-	static std::string getCurrentLangString();
 };
