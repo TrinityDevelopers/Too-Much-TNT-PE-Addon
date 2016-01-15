@@ -34,7 +34,7 @@ static std::string I18n$get(std::string const& key) {
 	if(key == "language.code")
 		return _I18n$get(key);
 	std::string retval = TMTMultilanguage::get(key);
-	if(retval.compare("") == 0)
+	if(retval == "")
 		return _I18n$get(key);
 	return retval;
 };

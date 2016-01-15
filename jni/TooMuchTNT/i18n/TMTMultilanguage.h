@@ -7,6 +7,7 @@
 class TMTMultilanguage {
 public:
 	static std::map<std::string, std::string> en_US;
+	static std::map<std::string, std::string> es_MX;
 	
 	static std::string get(const std::string&);
 };
