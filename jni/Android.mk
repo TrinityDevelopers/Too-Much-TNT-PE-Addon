@@ -2,12 +2,17 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := com.trinitydevelopers.toomuchtnt.mcpeaddon # should match the name in the AndroidManifest.xml
-LOCAL_SRC_FILES_RAW := $(shell find $(LOCAL_PATH) -name '*.cpp') $(shell find $(LOCAL_PATH) -name '*.c')
-LOCAL_SRC_FILES := $(LOCAL_SRC_FILES_RAW:$(LOCAL_PATH)/%=%)
-# search for libraries in the jni/ folder of our project,
-# link to the libraries for printing to logcat, getting methods from libminecraftpe,
-# and for accessing BlockLauncher functions
-LOCAL_LDLIBS    := -L$(LOCAL_PATH) -llog -ldl -lminecraftpe -lmcpelauncher_tinysubstrate
+define walk
+	$(wildcard $(1)) $(foreach e, $(wildcard $(1)/*), $(call walk, $(e)))
+endef
+
+ALLFILES = $(call walk, $(LOCAL_PATH))
+FILE_LIST := $(filter %.cpp, $(ALLFILES))
+
+LOCAL_MODULE    := com.virtualoso.toomuchtnt
+LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
+LOCAL_LDLIBS := -L$(LOCAL_PATH)/libs/$(TARGET_ARCH_ABI) -llog -ldl -lminecraftpe -lmcpelauncher_tinysubstrate
+
+TARGET_NO_UNDEFINED_LDFLAGS :=
 
 include $(BUILD_SHARED_LIBRARY)

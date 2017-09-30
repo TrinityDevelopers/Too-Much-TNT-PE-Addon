@@ -1,0 +1,1 @@
+START cmd.exe /k "cd blac & blac.bat"

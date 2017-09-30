@@ -6,9 +6,9 @@ public:
 	static Block* TNTx5;
 	
 	static void initBlocks();
-	static void registerBlocks();
-	static void registerBlock(Block*);
-	static int getNewRandomBlockID();
+	static void initBlockItems();
+	static void initBlockGraphics();
+	static int getNextBlockId();
 	
 	static void registerCreativeItems();
 };

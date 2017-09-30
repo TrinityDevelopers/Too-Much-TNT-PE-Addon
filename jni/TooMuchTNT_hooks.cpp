@@ -4,15 +4,13 @@
 #include <stdlib.h>
 #include <string>
 #include <memory>
-
 #include "Substrate.h"
 
-#include "mcpe/world/level/block/Block.h"
-#include "mcpe/world/item/Item.h"
-#include "mcpe/i18n/I18n.h"
+#include "mcpe/block/Block.h"
+#include "mcpe/block/BlockGraphics.h"
+#include "mcpe/item/Item.h"
 
 #include "TooMuchTNT/TooMuchTNT.h"
-#include "TooMuchTNT/i18n/TMTMultilanguage.h"
 
 void (*_Block$initBlocks)();
 void Block$initBlocks() {
@@ -21,6 +19,12 @@ void Block$initBlocks() {
 	TooMuchTNT::initBlocks();
 }
 
+void (*_initBlockGraphics)(ResourcePackManager&);
+void initBlockGraphics(ResourcePackManager& rpm) {
+	_initBlockGraphics(rpm);
+
+	TooMuchTNT::initBlockGraphics();
+}
 
 void (*_Item$initCreativeItems)();
 void Item$initCreativeItems() {
@@ -29,50 +33,10 @@ void Item$initCreativeItems() {
 	TooMuchTNT::registerCreativeItems();
 }
 
-static std::string (*_I18n$get)(std::string const&);
-static std::string I18n$get(std::string const& key) {
-	if(key == "language.code")
-		return _I18n$get(key);
-	std::string retval = TMTMultilanguage::get(key);
-	if(retval == "")
-		return _I18n$get(key);
-	return retval;
-};
-
-Block* (*_Block$Block1)(Block*, const std::string&, int, const Material&);
-Block* Block$Block1(Block* block, const std::string& name, int id, const Material& material) {
-	Block::mBlocksHook[id] = block;
-	
-	return _Block$Block1(block, name, id, material);
-}
-
-Block* (*_Block$Block2)(Block*, const std::string&, int, TextureUVCoordinateSet, const Material&);
-Block* Block$Block2(Block* block, const std::string& name, int id, TextureUVCoordinateSet tex, const Material& material) {
-	Block::mBlocksHook[id] = block;
-	
-	return _Block$Block2(block, name, id, tex, material);
-}
-
-Block* (*_Block$Block3)(Block*, const std::string&, int, const std::string&, const Material&);
-Block* Block$Block3(Block* block, const std::string& name, int id, const std::string& tex, const Material& material) {
-	if(tex != "missing_tile")
-		Block::mBlocksHook[id] = block;
-	
-	return _Block$Block3(block, name, id, tex, material);
-}
-
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	MSHookFunction((void*) &Block::initBlocks, (void*) &Block$initBlocks, (void**) &_Block$initBlocks);
+	MSHookFunction((void*) &BlockGraphics::initBlocks, (void*) &initBlockGraphics, (void**) &_initBlockGraphics);
 	MSHookFunction((void*) &Item::initCreativeItems, (void*) &Item$initCreativeItems, (void**) &_Item$initCreativeItems);
-	MSHookFunction((void*) &I18n::get, (void*) &I18n$get, (void**) &_I18n$get);
-	
-	void* BlockConstructor1 = dlsym(RTLD_DEFAULT, "_ZN5BlockC2ERKSsiRK8Material");
-	MSHookFunction(BlockConstructor1, (void*) &Block$Block1, (void**) &_Block$Block1);
-	
-	void* BlockConstructor2 = dlsym(RTLD_DEFAULT, "_ZN5BlockC2ERKSsi22TextureUVCoordinateSetRK8Material");
-	MSHookFunction(BlockConstructor2, (void*) &Block$Block2, (void**) &_Block$Block2);
-	
-	void* BlockConstructor3 = dlsym(RTLD_DEFAULT, "_ZN5BlockC2ERKSsiS1_RK8Material");
-	MSHookFunction(BlockConstructor3, (void*) &Block$Block3, (void**) &_Block$Block3);
+
 	return JNI_VERSION_1_2;
 }

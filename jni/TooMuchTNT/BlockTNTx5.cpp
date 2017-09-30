@@ -1,28 +1,17 @@
 #include "BlockTNTx5.h"
 
-#include "mcpe/leveledit.h"
-#include "mcpe/world/entity/player/Player.h"
+#include "mcpe/level/BlockSource.h"
+#include "mcpe/level/Level.h"
 
 BlockTNTx5::BlockTNTx5(std::string asset, int id) : 
-	Block(asset, id, asset, Material::getMaterial(MaterialType::EXPLOSIVE)) {
-		
-	creativeCategory = 3;
-	setDestroyTime(0.0F);
-	setSoundType(SOUND_GRASS);
+	TntBlock(asset, id) {
 	
-	bottomIcon = getTextureUVCoordinateSet(asset, 1);
-	topIcon = getTextureUVCoordinateSet(asset, 2);
+	setCategory(CreativeItemCategory::ITEMS);
+	setDestroyTime(0.0F);
+	addBlockState((BlockState::BlockStates) 14, 1);
 }
 
-const TextureUVCoordinateSet& BlockTNTx5::getTexture(signed char side) {
-	return side == 1 ? topIcon : (side == 0 ? bottomIcon : texture);
-}
-
-int BlockTNTx5::getResourceCount(Random& rand, int i1, int i2) {
-	return 1;
-}
-
-bool BlockTNTx5::use(Player& player, const BlockPos& pos) {
+/*bool BlockTNTx5::use(Player& player, const BlockPos& pos) {
 	return Block::use(player, pos);
 }
 
