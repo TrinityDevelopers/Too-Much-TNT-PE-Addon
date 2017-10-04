@@ -15,7 +15,15 @@ obj/local/armeabi-v7a/objs/com.virtualoso.toomuchtnt/TooMuchTNT/BlockTNTx5.o: \
  jni/mcpe/block/../util/Util.h \
  D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream \
  D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm \
- jni/mcpe/level/BlockSource.h jni/mcpe/level/Level.h
+ jni/mcpe/level/BlockSource.h jni/mcpe/level/Level.h \
+ jni/mcpe/level/../client/AppPlatformListener.h \
+ jni/mcpe/level/BlockSourceListener.h jni/mcpe/item/ItemInstance.h \
+ jni/mcpe/item/../util/String.h \
+ D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/cstring \
+ jni/mcpe/util/GameRules.h jni/mcpe/entity/EntityDefinitionIdentifier.h \
+ jni/mcpe/entity/EntityType.h jni/mcpe/entity/EntityFactory.h \
+ jni/mcpe/entity/Entity.h jni/mcpe/level/BlockPos.h \
+ jni/mcpe/inventory/Container.h
 
 jni/TooMuchTNT/BlockTNTx5.h:
 
@@ -62,3 +70,27 @@ D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm:
 jni/mcpe/level/BlockSource.h:
 
 jni/mcpe/level/Level.h:
+
+jni/mcpe/level/../client/AppPlatformListener.h:
+
+jni/mcpe/level/BlockSourceListener.h:
+
+jni/mcpe/item/ItemInstance.h:
+
+jni/mcpe/item/../util/String.h:
+
+D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/cstring:
+
+jni/mcpe/util/GameRules.h:
+
+jni/mcpe/entity/EntityDefinitionIdentifier.h:
+
+jni/mcpe/entity/EntityType.h:
+
+jni/mcpe/entity/EntityFactory.h:
+
+jni/mcpe/entity/Entity.h:
+
+jni/mcpe/level/BlockPos.h:
+
+jni/mcpe/inventory/Container.h:

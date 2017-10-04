@@ -201,6 +201,7 @@ public:
     CreativeItemCategory getCreativeCategory() const;
     float getGravity() const;
     Material* getMaterial() const;
+	BlockState& getBlockState(BlockState::BlockStates) const;
     float getFriction() const;
     float getDestroySpeed() const;
     bool isType(Block const*) const;
