@@ -5,8 +5,8 @@
 
 class EntityDefinitionIdentifier {
 public:
-	//std::string a, b, c;
-	char e_data[12];
+	//std::string a, id, event;
+	char data[12];
 
 	EntityDefinitionIdentifier(const EntityDefinitionIdentifier&);
 	EntityDefinitionIdentifier(EntityDefinitionIdentifier&&);

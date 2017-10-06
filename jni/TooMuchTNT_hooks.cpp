@@ -10,8 +10,11 @@
 #include "mcpe/block/BlockGraphics.h"
 #include "mcpe/item/Item.h"
 #include "mcpe/locale/Localization.h"
+#include "mcpe/entity/EntityDefinitionIdentifier.h"
+#include "mcpe/entity/Entity.h"
 
 #include "TooMuchTNT/TooMuchTNT.h"
+#include "TooMuchTNT/TntDef.h"
 
 void (*_Block$initBlocks)();
 void Block$initBlocks() {
@@ -32,6 +35,14 @@ void Item$initCreativeItems() {
 	_Item$initCreativeItems();
 
 	TooMuchTNT::registerCreativeItems();
+}
+
+std::unique_ptr<Entity> (*_CreateTNT)(EntityDefinitionGroup&, EntityDefinitionIdentifier const&);
+std::unique_ptr<Entity> CreateTNT(EntityDefinitionGroup& definitions, EntityDefinitionIdentifier const& identifier) {
+	if(TooMuchTNT::tntDef.type != TntType::REGULAR)
+		return TooMuchTNT::createPrimedTNT(definitions, identifier);
+
+	return _CreateTNT(definitions, identifier);
 }
 
 void (*_Localization$loadFromPack)(Localization*, std::string const&, const PackAccessStrategy&, std::vector<std::string> const&);
@@ -65,6 +76,10 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	MSHookFunction((void*) &Block::initBlocks, (void*) &Block$initBlocks, (void**) &_Block$initBlocks);
 	MSHookFunction((void*) &BlockGraphics::initBlocks, (void*) &initBlockGraphics, (void**) &_initBlockGraphics);
 	MSHookFunction((void*) &Item::initCreativeItems, (void*) &Item$initCreativeItems, (void**) &_Item$initCreativeItems);
+
+	void* SpawnTNT = dlsym(RTLD_DEFAULT, "_Z16_entityFromClassI9PrimedTntESt10unique_ptrI6EntitySt14default_deleteIS2_EER21EntityDefinitionGroupRK26EntityDefinitionIdentifier");
+	MSHookFunction(SpawnTNT, (void*) &CreateTNT, (void**) &_CreateTNT);
+
 	MSHookFunction((void*) &Localization::loadFromPack, (void*) &Localization$loadFromPack, (void**) &_Localization$loadFromPack);
 	MSHookFunction((void*) &Localization::loadFromResourcePackManager, (void*) &Localization$loadFromResourcePackManager, (void**) &_Localization$loadFromResourcePackManager);
 

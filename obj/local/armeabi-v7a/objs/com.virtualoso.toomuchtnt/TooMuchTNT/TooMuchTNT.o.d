@@ -1,7 +1,7 @@
 obj/local/armeabi-v7a/objs/com.virtualoso.toomuchtnt/TooMuchTNT/TooMuchTNT.o: \
  jni/TooMuchTNT/TooMuchTNT.cpp jni/TooMuchTNT/TooMuchTNT.h \
- jni/mcpe/block/Block.h \
  D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/memory \
+ jni/mcpe/block/Block.h \
  D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/vector \
  D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/map \
  D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/unordered_map \
@@ -21,14 +21,18 @@ obj/local/armeabi-v7a/objs/com.virtualoso.toomuchtnt/TooMuchTNT/TooMuchTNT.o: \
  jni/mcpe/block/../client/renderer/../../resource/ResourceLocation.h \
  jni/mcpe/block/../client/renderer/../../resource/ResourceFileSystem.h \
  jni/mcpe/item/BlockItem.h jni/mcpe/item/Item.h \
- jni/mcpe/item/UseAnimation.h jni/TooMuchTNT/BlockTNTx5.h \
- jni/mcpe/block/TntBlock.h
+ jni/mcpe/item/UseAnimation.h \
+ jni/mcpe/entity/EntityDefinitionIdentifier.h \
+ jni/mcpe/entity/EntityType.h jni/mcpe/entity/PrimedTnt.h \
+ jni/mcpe/entity/Entity.h jni/mcpe/entity/VariantParameterList.h \
+ jni/TooMuchTNT/BlockTNTx5.h jni/mcpe/block/TntBlock.h \
+ jni/TooMuchTNT/TntDef.h
 
 jni/TooMuchTNT/TooMuchTNT.h:
 
-jni/mcpe/block/Block.h:
-
 D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/memory:
+
+jni/mcpe/block/Block.h:
 
 D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/vector:
 
@@ -80,6 +84,18 @@ jni/mcpe/item/Item.h:
 
 jni/mcpe/item/UseAnimation.h:
 
+jni/mcpe/entity/EntityDefinitionIdentifier.h:
+
+jni/mcpe/entity/EntityType.h:
+
+jni/mcpe/entity/PrimedTnt.h:
+
+jni/mcpe/entity/Entity.h:
+
+jni/mcpe/entity/VariantParameterList.h:
+
 jni/TooMuchTNT/BlockTNTx5.h:
 
 jni/mcpe/block/TntBlock.h:
+
+jni/TooMuchTNT/TntDef.h:

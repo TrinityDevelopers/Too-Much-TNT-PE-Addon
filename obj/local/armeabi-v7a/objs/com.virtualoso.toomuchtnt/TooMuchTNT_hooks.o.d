@@ -46,7 +46,11 @@ obj/local/armeabi-v7a/objs/com.virtualoso.toomuchtnt/TooMuchTNT_hooks.o: \
  jni/mcpe/block/../client/renderer/../../resource/ResourceLocation.h \
  jni/mcpe/block/../client/renderer/../../resource/ResourceFileSystem.h \
  jni/mcpe/item/Item.h jni/mcpe/item/UseAnimation.h \
- jni/mcpe/locale/Localization.h jni/TooMuchTNT/TooMuchTNT.h
+ jni/mcpe/locale/Localization.h \
+ jni/mcpe/entity/EntityDefinitionIdentifier.h \
+ jni/mcpe/entity/EntityType.h jni/mcpe/entity/Entity.h \
+ jni/mcpe/entity/VariantParameterList.h jni/TooMuchTNT/TooMuchTNT.h \
+ jni/TooMuchTNT/TntDef.h
 
 D:/ndk/platforms/android-15/arch-arm/usr/include/jni.h:
 
@@ -154,4 +158,14 @@ jni/mcpe/item/UseAnimation.h:
 
 jni/mcpe/locale/Localization.h:
 
+jni/mcpe/entity/EntityDefinitionIdentifier.h:
+
+jni/mcpe/entity/EntityType.h:
+
+jni/mcpe/entity/Entity.h:
+
+jni/mcpe/entity/VariantParameterList.h:
+
 jni/TooMuchTNT/TooMuchTNT.h:
+
+jni/TooMuchTNT/TntDef.h:

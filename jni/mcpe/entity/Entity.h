@@ -3,11 +3,12 @@
 #include <vector>
 
 #include "EntityType.h"
+#include "VariantParameterList.h"
+#include "../math/Vec3.h"
 
 class Vec3;
 class Vec2;
 class AABB;
-class VariantParameterList;
 class UIProfanityContext;
 enum class MaterialType;
 class Player;
@@ -16,12 +17,13 @@ class Mob;
 class EntityDamageSource;
 class BlockPos;
 class FullBlock;
+class Block;
 class EntityEvent;
 class ItemInstance;
 class CompoundTag;
 class ArmorSlot;
 class EntityLink;
-class DimensionID;
+enum class DimensionId;
 class SetEntityDataPacket;
 class ChangeDimensionPacket;
 class LevelSoundEvent;
@@ -29,11 +31,22 @@ class EntityInteraction;
 class EntityPos;
 class EntityDefinitionGroup;
 class EntityDefinitionIdentifier;
+class EntityDefinitionDescriptor;
 class Level;
+class BlockSource;
 
 class Entity {
 public: 
 	class InitializationMethod;
+
+	bool unknown; // 4
+	VariantParameterList varList; // 8
+	char e_vars[12]; // 36
+	EntityDefinitionDescriptor& descriptor; // 48
+	char e_vars0[20]; // 52
+	Vec3 chunkPos; // 72
+	char e_vars1[68]; // 84
+	Vec3 pos; // 152;
 
 	char e_data[3408];
 
@@ -162,7 +175,7 @@ public:
 	virtual void saveWithoutId(CompoundTag&);
 	virtual void load(const CompoundTag&);
 	virtual void loadLinks(const CompoundTag&, std::vector<EntityLink>&);
-	virtual EntityType getEntityTypeId() = 0;
+	virtual EntityType getEntityTypeId() const = 0;
 	virtual void acceptClientsideEntityData(Player&, const SetEntityDataPacket&);
 	virtual void queryEntityRenderer();
 	virtual void getSourceUniqueID() const;
@@ -232,4 +245,8 @@ public:
 	virtual void getDefaultLootTable();
 	virtual void _removeRider(Entity&, bool);
 	virtual void onSizeUpdated();
+
+	void setPreviousPosRot(const Vec3&, const Vec2&);
+	void moveTo(const Vec3&, const Vec2&);
+	void updateDescription();
 };

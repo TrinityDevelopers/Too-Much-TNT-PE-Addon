@@ -22,8 +22,10 @@ obj/local/armeabi-v7a/objs/com.virtualoso.toomuchtnt/TooMuchTNT/BlockTNTx5.o: \
  D:/ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/cstring \
  jni/mcpe/util/GameRules.h jni/mcpe/entity/EntityDefinitionIdentifier.h \
  jni/mcpe/entity/EntityType.h jni/mcpe/entity/EntityFactory.h \
- jni/mcpe/entity/Entity.h jni/mcpe/level/BlockPos.h \
- jni/mcpe/inventory/Container.h
+ jni/mcpe/entity/Entity.h jni/mcpe/entity/VariantParameterList.h \
+ jni/mcpe/entity/PrimedTnt.h jni/mcpe/level/BlockPos.h \
+ jni/mcpe/inventory/Container.h jni/TooMuchTNT/TooMuchTNT.h \
+ jni/TooMuchTNT/TntDef.h
 
 jni/TooMuchTNT/BlockTNTx5.h:
 
@@ -91,6 +93,14 @@ jni/mcpe/entity/EntityFactory.h:
 
 jni/mcpe/entity/Entity.h:
 
+jni/mcpe/entity/VariantParameterList.h:
+
+jni/mcpe/entity/PrimedTnt.h:
+
 jni/mcpe/level/BlockPos.h:
 
 jni/mcpe/inventory/Container.h:
+
+jni/TooMuchTNT/TooMuchTNT.h:
+
+jni/TooMuchTNT/TntDef.h:

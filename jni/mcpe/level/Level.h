@@ -12,6 +12,7 @@ class EntityUniqueID;
 class LevelChunk;
 class EntityDamageSource;
 class Difficulty;
+class EntityDefinitionGroup;
 
 enum class LevelEvent : int;
 
@@ -43,6 +44,7 @@ public:
 	virtual void getTradeTables();
 
 	GameRules& getGameRules();
+	EntityDefinitionGroup& getEntityDefinitions() const;
 	Random* getRandom() const;
 	int getSeaLevel();
 	void setTime(int);
