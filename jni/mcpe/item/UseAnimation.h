@@ -2,7 +2,7 @@
 
 enum class UseAnimation : unsigned char
 {
-	NOME,
+	NONE,
 	EAT,
 	DRINK,
 	BLOCK,

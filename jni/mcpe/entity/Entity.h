@@ -5,6 +5,7 @@
 #include "EntityType.h"
 #include "VariantParameterList.h"
 #include "../math/Vec3.h"
+#include "../client/renderer/entity/EntityRendererId.h"
 
 class Vec3;
 class Vec2;
@@ -47,8 +48,10 @@ public:
 	Vec3 chunkPos; // 72
 	char e_vars1[68]; // 84
 	Vec3 pos; // 152;
+	char e_vars2[84]; // 164
+	EntityRendererId rendererId; // 248
 
-	char e_data[3408];
+	char e_data[3160];
 
 	Entity(BlockSource&, const std::string&);
 	Entity(EntityDefinitionGroup&, const EntityDefinitionIdentifier&);

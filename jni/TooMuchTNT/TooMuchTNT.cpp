@@ -1,57 +1,76 @@
 #include "TooMuchTNT.h"
 
 #include "mcpe/block/Block.h"
+#include "mcpe/block/BlockLegacy.h"
+#include "mcpe/block/BlockPalette.h"
 #include "mcpe/block/BlockGraphics.h"
 #include "mcpe/item/BlockItem.h"
-#include "mcpe/entity/EntityDefinitionIdentifier.h"
-#include "mcpe/entity/PrimedTnt.h"
+//#include "mcpe/entity/EntityDefinitionIdentifier.h"
+//#include "mcpe/entity/PrimedTnt.h"
 
 #include "BlockTNTx5.h"
 
 #include "TntDef.h"
 
+//#include "RenderTNTx5Primed.h"
+
 Block* TooMuchTNT::TNTx5;
+BlockLegacy* TooMuchTNT::legacyTNTx5;
 
 TntDef TooMuchTNT::tntDef = {TntType::REGULAR, TntStat::REGULAR};
 
 
 void TooMuchTNT::initBlocks() {
-	TNTx5 = registerBlock<BlockTNTx5>("TNTx5", getNextBlockId());
+	legacyTNTx5 = registerBlock<BlockTNTx5>("TNTx5", 253/*getNextBlockId()*/);
+}
+
+void TooMuchTNT::postInitBlocks(const BlockPalette& palette) {
+	TNTx5 = palette.tryGetLegacyBlockState(16 * legacyTNTx5->blockId);
+	Block::mBlockLookupMap[Util::toLowerCase(legacyTNTx5->nameId)] = TNTx5;
+	Block::mBlocks[legacyTNTx5->blockId] = TNTx5;
 	
 	initBlockItems();
 }
 
 void TooMuchTNT::initBlockItems() {
-	registerItem<BlockItem>(TNTx5->getDescriptionId(), TNTx5->blockId - 256);
+	registerItem<BlockItem>(legacyTNTx5->getDescriptionId(), getBlockItemId(legacyTNTx5->blockId));
 }
 
 void TooMuchTNT::initBlockGraphics() {
-	BlockGraphics::mBlocks[TNTx5->blockId] = new BlockGraphics("tnt");
-	BlockGraphics::mBlocks[TNTx5->blockId]->setTextureItem("TNTx5_top", "TNTx5_bottom", "TNTx5_side");
-	BlockGraphics::mBlocks[TNTx5->blockId]->setSoundType(BlockSoundType::GRASS);
+	BlockGraphics::mBlocks[legacyTNTx5->blockId] = new BlockGraphics("tnt");
+	BlockGraphics::mBlocks[legacyTNTx5->blockId]->setTextureItem("TNTx5_top", "TNTx5_bottom", "TNTx5_side");
+	BlockGraphics::mBlocks[legacyTNTx5->blockId]->setSoundType(BlockSoundType::GRASS);
 }
 
-int TooMuchTNT::getNextBlockId() {
-	for(int counter = 0; counter < 254; counter++) {
+short TooMuchTNT::getNextBlockId() {
+	for(short counter = 0; counter < 511; counter++) {
 		std::stringstream ss;
 		ss << counter;
 		std::string blockName = ss.str();
-		if(Block::mBlocks[counter]->nameId == blockName)
+		if(BlockLegacy::mBlocks[counter]->nameId == blockName)
 			return counter;
 	}
-	return 255;
+	return 512;
+}
+
+short TooMuchTNT::getBlockItemId(short blockId) {
+	if(blockId > 255)
+		return 255 - blockId;
+	return blockId;
 }
 
 void TooMuchTNT::registerCreativeItems() {
-	Item::addCreativeItem(TNTx5, 0);
+	Item::addCreativeItem(*TNTx5, 0);
 }
 
-std::unique_ptr<Entity> TooMuchTNT::createPrimedTNT(EntityDefinitionGroup& definitions, const EntityDefinitionIdentifier& identifier) {
+/*std::unique_ptr<Entity> TooMuchTNT::createPrimedTNT(EntityDefinitionGroup& definitions, const EntityDefinitionIdentifier& identifier) {
 	if(tntDef.stat == TntStat::REGULAR) {
 		switch(tntDef.type) {
 			case TntType::TNTX5:
 			{
-				return std::unique_ptr<Entity>(new PrimedTnt(definitions, EntityDefinitionIdentifier("minecraft:tntx5")));
+				std::unique_ptr<Entity> tnt = std::unique_ptr<Entity>(new PrimedTnt(definitions, EntityDefinitionIdentifier("minecraft:tntx5")));
+				//tnt->rendererId = EntityRendererId::TNTX5;
+				return tnt;
 			}
 			default:
 			{
@@ -63,7 +82,9 @@ std::unique_ptr<Entity> TooMuchTNT::createPrimedTNT(EntityDefinitionGroup& defin
 		switch(tntDef.type) {
 			case TntType::TNTX5:
 			{
-				return std::unique_ptr<Entity>(new PrimedTnt(definitions, EntityDefinitionIdentifier("minecraft", "tntx5", "from_explosion")));
+				std::unique_ptr<Entity> tnt = std::unique_ptr<Entity>(new PrimedTnt(definitions, EntityDefinitionIdentifier("minecraft", "tntx5", "from_explosion")));
+				//tnt->rendererId = EntityRendererId::TNTX5;
+				return tnt;
 			}
 			default:
 			{
@@ -72,3 +93,21 @@ std::unique_ptr<Entity> TooMuchTNT::createPrimedTNT(EntityDefinitionGroup& defin
 		}
 	}
 }
+
+EntityRenderer* TooMuchTNT::TNTx5Renderer;
+
+void TooMuchTNT::registerTNTRenderers(mce::TextureGroup& textures, BlockTessellator& tessellator) {
+	//TNTx5Renderer = new RenderTNTx5Primed(textures, tessellator);
+}
+
+void TooMuchTNT::renderTNT(BaseEntityRenderContext& context, Entity& tnt, const Vec3& pos, const Vec2& rot) {
+	/*EntityRenderData data = EntityRenderData(tnt, pos, rot);
+	switch(tnt.rendererId) {
+		case EntityRendererId::TNTX5:
+		{
+			TNTx5Renderer->render(context, data);
+			TNTx5Renderer->renderFlame(context, data);
+			break;
+		}
+	}*/
+//}

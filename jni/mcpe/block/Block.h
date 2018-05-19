@@ -1,249 +1,29 @@
 #pragma once
 
-#include <memory>
-#include <string>
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include "BlockID.h"
-#include "FullBlock.h"
-#include "BlockState.h"
-#include "Material.h"
-#include "../item/CreativeItemCategory.h"
-#include "../math/AABB.h"
-#include "../util/Color.h"
-#include "../util/Util.h"
+#include "BlockLegacy.h"
+#include "../nbt/CompoundTag.h"
 
-class BlockSource;
-class BlockPos;
-class Entity;
-class Mob;
-class Player;
-class Random;
-class ItemInstance;
-class Container;
-class Brightness;
-class ItemUseCallback;
-enum class BlockProperty;
-enum class BlockSupportType;
-enum class BlockRenderLayer;
-enum class BlockEntityType;
-enum class EntityType;
+class BlockPalette;
 
-// 1.2.0.81
+// 1.2.13.60
 
 class Block {
 public:
-    /* 0x04 */ unsigned char blockId;
-    /* 0x08 */ std::string descriptionId;
-    /* 0x0c */ std::string nameId;
-    /* 0x10 */ bool fancy;
-    /* 0x11 */ bool canBuildOver;
-    /* 0x14 */ BlockRenderLayer renderLayer;
-    /* 0x18 */ int properties;
-    /* 0x1c */ int idk_i;
-	/* 0x20 */ BlockEntityType blockEntityType;
-    /* 0x24 */ bool animates;
-	/* 0x28 */ float idk_f;
-	/* 0x2c */ float thickness;
-	/* 0x30 */ bool slideable;
-	/* 0x31 */ bool instatick;
-	/* 0x32 */ bool isInteraction;
-	/* 0x34 */ float gravity;
-	/* 0x38 */ Material* material;
-    /* 0x3c */ Color mapColor;
-    /* 0x4c */ float friction;
-    /* 0x50 */ bool heavy;
-    /* 0x54 */ float particleQuantity;
-	/* 0x58 */ float destroyTime;
-	/* 0x5c */ float blastResistance;
-	/* 0x60 */ CreativeItemCategory category;
-	/* 0x64 */ bool allowsRunes;
-    /* 0x65 */ bool idk_b;
-    /* 0x68 */ AABB aabb;
-	/* 0x84 */ int bitsUsed;
-	/* 0x88 */ BlockState blockStates[42];
+	unsigned char data;
+    const BlockLegacy* block;
+    CompoundTag nbt;
+    unsigned int runtimeId;
 
-	// virtual
+    Block(unsigned char, const BlockLegacy*);
 	virtual ~Block();
-	virtual void tick(BlockSource&, const BlockPos&, Random&) const;
-	virtual bool getCollisionShape(AABB&, BlockSource&, const BlockPos&, Entity*) const;
-	virtual bool isObstructingChests(BlockSource&, const BlockPos&) const;
-	virtual Vec3 randomlyModifyPosition(const BlockPos&, int&) const;
-	virtual Vec3 randomlyModifyPosition(const BlockPos&) const;
-	virtual void addAABBs(BlockSource&, const BlockPos&, const AABB*, std::vector<AABB, std::allocator<AABB> >&) const;
-	virtual void getAABB(BlockSource&, const BlockPos&, AABB&, int, bool, int) const;
-	virtual void addCollisionShapes(BlockSource&, const BlockPos&, const AABB*, std::vector<AABB, std::allocator<AABB> >&, Entity*) const;
-	virtual void getOutline(BlockSource&, const BlockPos&, AABB&) const;
-	virtual bool canProvideSupport(BlockSource&, const BlockPos&, signed char, BlockSupportType) const;
-	virtual bool isInfiniburnBlock(int) const;
-	virtual bool isCropBlock() const;
-	virtual bool isStemBlock() const;
-	virtual bool isContainerBlock() const;
-	virtual bool isCraftingBlock() const;
-	virtual bool isInteractiveBlock() const;
-	virtual bool isWaterBlocking() const;
-	virtual bool isHurtableBlock() const;
-	virtual bool isFenceBlock() const;
-	virtual bool isStairBlock() const;
-	virtual bool isSlabBlock() const;
-	virtual bool isRailBlock() const;
-	virtual bool canHurtAndBreakItem() const;
-	virtual bool isSignalSource() const;
-	virtual bool canBeOriginalSurface() const;
-	virtual bool isValidAuxValue(int) const;
-	virtual bool canFillAtPos(BlockSource&, const BlockPos&, unsigned char) const;
-	virtual void sanitizeFillBlock(BlockSource&, const BlockPos&, FullBlock) const;
-	virtual void onFillBlock(BlockSource&, const BlockPos&, FullBlock) const;
-	virtual int getDirectSignal(BlockSource&, const BlockPos&, int) const;
-	virtual bool waterSpreadCausesSpawn() const;
-	virtual bool shouldConnectToRedstone(BlockSource&, const BlockPos&, int) const;
-	virtual void handleRain(BlockSource&, const BlockPos&, float) const;
-	virtual float getThickness() const;
-	virtual bool checkIsPathable(Entity&, const BlockPos&, const BlockPos&) const;
-	virtual bool shouldDispense(BlockSource&, Container&) const;
-	virtual bool dispense(BlockSource&, Container&, int, const Vec3&, signed char) const;
-	virtual void onPlace(BlockSource&, const BlockPos&) const;
-	virtual void onRemove(BlockSource&, const BlockPos&) const;
-	virtual void onExploded(BlockSource&, const BlockPos&, Entity*) const;
-	virtual void onStepOn(Entity&, const BlockPos&) const;
-	virtual void onFallOn(BlockSource&, const BlockPos&, Entity*, float) const;
-	virtual void onRedstoneUpdate(BlockSource&, const BlockPos&, int, bool) const;
-	virtual void onMove(BlockSource&, const BlockPos&, const BlockPos&) const;
-	virtual bool detachesOnPistonMove(BlockSource&, const BlockPos&) const;
-	virtual void onLoaded(BlockSource&, const BlockPos&) const;
-	virtual int getRedstoneProperty(BlockSource&, const BlockPos&) const;
-	virtual void updateEntityAfterFallOn(Entity&) const;
-	virtual void ignoreEntitiesOnPistonMove(unsigned char) const;
-	virtual bool onFertilized(BlockSource&, const BlockPos&, Entity*, ItemUseCallback*) const;
-	virtual bool mayConsumeFertilizer(BlockSource&) const;
-	virtual bool mayPick() const;
-	virtual bool mayPick(BlockSource&, int, bool) const;
-	virtual bool mayPlace(BlockSource&, const BlockPos&, signed char) const;
-	virtual bool mayPlace(BlockSource&, const BlockPos&) const;
-	virtual bool mayPlaceOn(const Block&) const;
-	virtual bool tryToPlace(BlockSource&, const BlockPos&, unsigned char) const;
-	virtual bool breaksFallingBlocks(int) const;
-	virtual void destroy(BlockSource&, const BlockPos&, int, Entity*) const;
-	virtual bool playerWillDestroy(Player&, const BlockPos&, int) const;
-	virtual void getIgnoresDestroyPermissions(Entity&, const BlockPos&) const;
-	virtual void neighborChanged(BlockSource&, const BlockPos&, const BlockPos&) const;
-	virtual bool getSecondPart(unsigned char, const BlockPos&, BlockPos&) const;
-	virtual bool getSecondPart(BlockSource&, const BlockPos&, BlockPos&) const;
-	virtual unsigned char getResource(Random&, int, int) const;
-	virtual int getResourceCount(Random&, int, int) const;
-	virtual ItemInstance asItemInstance(BlockSource&, const BlockPos&, int) const;
-	virtual bool spawnResources(BlockSource&, const BlockPos&, int, float, int) const;
-	virtual bool spawnBurnResources(BlockSource&, float, float, float);
-	virtual float getExplosionResistance(Entity*) const;
-	virtual void clip(BlockSource&, const BlockPos&, const Vec3&, const Vec3&, bool, int) const;
-	virtual bool use(Player&, const BlockPos&, ItemUseCallback*) const;
-	virtual int getPlacementDataValue(Entity&, const BlockPos&, signed char, const Vec3&, int) const;
-	virtual int calcVariant(BlockSource&, const BlockPos&, unsigned char) const;
-	virtual bool isAttachedTo(BlockSource&, const BlockPos&, BlockPos&) const;
-	virtual bool attack(Player*, const BlockPos&) const;
-	virtual void handleEntityInside(BlockSource&, const BlockPos&, Entity*, Vec3&) const;
-	virtual void entityInside(BlockSource&, const BlockPos&, Entity&) const;
-	virtual void playerDestroy(Player&, const BlockPos&, int) const;
-	virtual bool canSurvive(BlockSource&, const BlockPos&) const;
-	virtual int getExperienceDrop(Random&) const;
-	virtual bool canBeBuiltOver(BlockSource&, const BlockPos&) const;
-	virtual void triggerEvent(BlockSource&, const BlockPos&, int, int) const;
-	virtual void* getMobToSpawn(BlockSource&, const BlockPos&) const;
-	virtual Color getMapColor(BlockSource&, const BlockPos&) const;
-	virtual Color getMapColor() const;
-	virtual bool shouldStopFalling(Entity&) const;
-	virtual bool pushesUpFallingBlocks() const;
-	virtual float calcGroundFriction(Mob&, const BlockPos&) const;
-	virtual bool canHaveExtraData() const;
-	virtual bool hasComparatorSignal() const;
-	virtual int getComparatorSignal(BlockSource&, const BlockPos&, signed char, int) const;
-	virtual int getIconYOffset() const;
-	virtual std::string buildDescriptionId(unsigned char) const;
-	virtual unsigned int getColor(int) const;
-	virtual unsigned int getColor(BlockSource&, const BlockPos&) const;
-	virtual unsigned int getColor(BlockSource&, const BlockPos&, unsigned char) const;
-	virtual unsigned int getColorForParticle(BlockSource&, const BlockPos&, int) const;
-	virtual bool isSeasonTinted(BlockSource&, const BlockPos&) const;
-	virtual void onGraphicsModeChanged(bool, bool, bool);
-	virtual BlockRenderLayer getRenderLayer(BlockSource&, const BlockPos&) const;
-	virtual void* getExtraRenderLayers() const;
-	virtual AABB const& getVisualShape(BlockSource&, const BlockPos&, AABB&, bool) const;
-	virtual AABB const& getVisualShape(unsigned char, AABB&, bool) const;
-	virtual int getVariant(int) const;
-	virtual signed char getMappedFace(signed char, int) const;
-	virtual void animateTick(BlockSource&, const BlockPos&, Random&) const;
-	virtual void init();
-	virtual bool canBeSilkTouched() const;
-	virtual ItemInstance getSilkTouchItemInstance(unsigned char) const;
-	virtual void setVisualShape(const AABB&);
-	virtual void setVisualShape(const Vec3&, const Vec3&);
-	virtual void setLightBlock(Brightness);
-	virtual void setLightEmission(float);
-	virtual void setExplodeable(float);
-	virtual void setDestroyTime(float);
-	virtual void setFriction(float);
-	virtual void setTicking(bool);
-	virtual void setMapColor(const Color&);
-	virtual void addProperty(BlockProperty);
-	virtual void addBlockState(BlockState::BlockStates, int);
-	virtual void resetBitsUsed();
-	virtual void setAllowsRunes(bool);
-	virtual int getSpawnResourcesAuxValue(unsigned char) const;
-
-    // non virtual
-    Block(std::string const&, int, Material const&);
-    void setCategory(CreativeItemCategory);
-    void setNameId(std::string const&);
-    void setSolid(bool);
-    bool canSlide() const;
-    bool canInstatick() const;
-    CreativeItemCategory getCreativeCategory() const;
-    float getGravity() const;
-    Material* getMaterial() const;
-	BlockState& getBlockState(BlockState::BlockStates) const;
-    float getFriction() const;
-    float getDestroySpeed() const;
-    bool isType(Block const*) const;
-    void clip(BlockSource&, BlockPos const&, Vec3 const&, Vec3 const&, bool, int, AABB const&) const;
-    void popResource(BlockSource&, BlockPos const&, ItemInstance const&) const;
-    bool hasProperty(BlockProperty) const;
-    bool isSolid() const;
-    bool addAABB(AABB const&, AABB const*, std::vector<AABB>&) const;
-    bool pushesOutItems() const;
-    void setPushesOutItems(bool);
-    bool isUnbreakable() const;
-    bool isHeavy() const;
-    std::string const& getDescriptionId() const;
-    bool isAlphaTested() const;
-    bool isSolidBlockingBlock() const;
-    BlockEntityType getBlockEntityType() const;
-    bool hasBlockEntity() const;
-    BlockRenderLayer getRenderLayer() const;
-    int getProperties() const;
-    float getShadeBrightness() const;
-    void getDebugText(std::vector<std::string>&) const;
-    bool canGrowChorus() const;
-    void* getTypeToSpawn(BlockSource&, EntityType, BlockPos const&) const;
-    void* getMobToSpawn(BlockSource&, BlockPos const&, std::map<EntityType, int>, bool&) const;
+	virtual BlockRenderLayer getRenderLayer() const;
 
     static Block* lookupByName(std::string const&, bool);
-	static void initBlocks();
+	static void initBlocks(BlockPalette&);
 	static void teardownBlocks();
-	static float getLightEmission(BlockID);
-	static signed char getPlacementFacingAll(Entity&, const BlockPos&, float);
-	static BlockID transformToValidBlockId(BlockID);
-	static BlockID transformToValidBlockId(BlockID, const BlockPos&);
-	static signed char getPlacementFacingAllExceptAxisY(Entity&, const BlockPos&, float);
 
     static std::unordered_map<std::string,Block const*> mBlockLookupMap;
-	static std::vector<std::unique_ptr<Block>> mOwnedBlocks;
-	static Block* mBlocks[256];
-	static bool mSolid[256];
-	static float mTranslucency[256];
-	static uint8_t mLightBlock[256];
-	static int mLightEmission[256];
-	static bool mShouldTick[256];
+	static Block* mBlocks[512];
 
 	static Block* mAir; // 0
 	static Block* mStone; // 1
@@ -437,7 +217,7 @@ public:
 	static Block* mInfoReserved6; // 255
 };
 
-template <typename BlockType,typename...Args>
+/*template <typename BlockType,typename...Args>
 BlockType* registerBlock(std::string const&name,int id,const Args&...rest)
 {
 	//std::string const block_name = Util::toLowerCase(name);
@@ -449,4 +229,4 @@ BlockType* registerBlock(std::string const&name,int id,const Args&...rest)
 	Block::mOwnedBlocks.emplace_back(std::unique_ptr<BlockType>(new_instance));
 	//Block::mBlockLookupMap.emplace(block_name,(Block const*)new_instance);
 	return new_instance;
-}
+}*/

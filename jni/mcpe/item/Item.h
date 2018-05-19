@@ -7,7 +7,6 @@
 #include "CreativeItemCategory.h"
 #include "UseAnimation.h"
 #include "../math/Vec3.h"
-#include "../block/BlockID.h"
 #include "../util/Util.h"
 
 class Level;
@@ -25,6 +24,7 @@ class Color;
 class IDataInput;
 class IDataOutput;
 class ResourcePackManager;
+class ItemUseCallback;
 enum class CooldownType;
 class FoodItemComponent;
 class SeedItemComponent;
@@ -66,21 +66,25 @@ public:
 	bool stackedByData; // 34
 	bool requiresWorldBuilder; // 35
 	int maxUseDuration; // 36
-	int idk; // 40
-	BlockID blockId; // 44
-	UseAnimation useAnimation; // 45
-	CreativeItemCategory category; // 48
-	int unknown; // 52
-	std::string const* hoverTextColor; // 56
-	TextureUVCoordinateSet* icon; // 60
-	TextureAtlasItem* customAtlasIcon; // 64
-	bool hasRenderOffsets; // 68
-	Vec3 vrHandControllerPositionAdjust; // 72
-	Vec3 vrHandControllerRotationAdjust; // 84
-	float vrHandControllerScale; // 96
-	std::unique_ptr<FoodItemComponent> foodComponent; // 100
-	std::unique_ptr<SeedItemComponent> seedComponent; // 104
-	std::unique_ptr<CameraItemComponent> cameraComponent; // 108
+	bool b1; // 40
+	bool b2; // 41
+	bool allowOffhand; // 42
+	bool b3; // 43
+	bool b4; // 44
+	void* block; // 48
+	UseAnimation useAnimation; // 52
+	CreativeItemCategory category; // 56
+	void* unknown; // 60
+	void* colorFormat; // 64
+	TextureUVCoordinateSet* textureIcon; // 68
+	TextureAtlasItem* textureItem; // 72
+	bool hasRenderOffsets; // 76
+	Vec3 vrHandControllerPositionAdjust; // 80
+	Vec3 vrHandControllerRotationAdjust; // 92
+	float vrHandControllerScale; // 104
+	std::unique_ptr<FoodItemComponent> foodComponent; // 108
+	std::unique_ptr<SeedItemComponent> seedComponent; // 112
+	std::unique_ptr<CameraItemComponent> cameraComponent; // 116
 
 	// virtual
 	virtual ~Item();
@@ -117,6 +121,7 @@ public:
 	virtual bool isValidRepairItem(const ItemInstance&, const ItemInstance&) const;
 	virtual short getEnchantSlot() const;
 	virtual short getEnchantValue() const;
+	virtual int getArmorValue() const;
 	virtual bool isComplex() const;
 	virtual bool isValidAuxValue(int) const;
 	virtual int getDamageChance(int) const;
@@ -129,7 +134,7 @@ public:
 	virtual void releaseUsing(ItemInstance&, Player*, int) const;
 	virtual float getDestroySpeed(const ItemInstance&, const Block&) const;
 	virtual void hurtEnemy(ItemInstance&, Mob*, Mob*) const;
-	virtual void mineBlock(ItemInstance&, BlockID, int, int, int, Entity*) const;
+	virtual void mineBlock(ItemInstance&, const Block&, int, int, int, Entity*) const;
 	virtual std::string buildDescriptionId(const ItemInstance&) const;
 	virtual std::string buildEffectDescriptionName(const ItemInstance&) const;
 	virtual std::string buildCategoryDescriptionName(const ItemInstance&) const;
@@ -147,7 +152,7 @@ public:
 	virtual TextureUVCoordinateSet const& getIcon(int, int, bool) const;
 	virtual int getIconYOffset() const;
 	virtual bool isMirroredArt() const;
-	virtual void getAuxValuesDescription() const;
+	virtual void* getAuxValuesDescription() const;
 	virtual bool _checkUseOnPermissions(Entity&, ItemInstance&, const signed&, const BlockPos&) const;
 	virtual bool _calculatePlacePos(ItemInstance&, Entity&, signed char&, BlockPos&) const;
 	virtual bool _useOn(ItemInstance&, Entity&, BlockPos, signed char, float, float, float, ItemUseCallback*) const;
@@ -155,18 +160,18 @@ public:
 	// non virtual
 	Item(std::string const&, short);
 	static Item* lookupByName(std::string const&, bool);
-	static TextureUVCoordinateSet getTextureUVCoordinateSet(std::string const&, int);
-	static TextureUVCoordinateSet getTextureItem(std::string const&);
+	static TextureUVCoordinateSet* getTextureUVCoordinateSet(std::string const&, int);
+	static TextureAtlasItem* getTextureItem(std::string const&);
 	static void addBlockItems();
-	static void registerItems();
+	static void registerItems(bool);
 	static void teardownItems();
 	static void initClientData();
 	static void initServerData(ResourcePackManager&);
-	static void addCreativeItem(Block const*, short);
+	static void addCreativeItem(Block const&, short);
 	static void addCreativeItem(Item*, short);
 	static void addCreativeItem(ItemInstance const&);
 	static void addCreativeItem(short, short);
-	static void initCreativeItems();
+	static void initCreativeItems(bool);
 	static void initCreativeCategories();
 
 	float destroySpeedBonus(const ItemInstance&) const;
@@ -175,8 +180,11 @@ public:
 	void initServer(Json::Value&);
 	void setTextureAtlas(std::shared_ptr<TextureAtlas>);
 	void setIsMirroredArt(bool);
+	void* toBlockId(short);
 
-	static Item* mItems[4096];
+	static Item* mItems[512];
+	static Item* mExtraItems[512];
+	static bool mInCreativeGroup;
 	static std::vector<ItemInstance> mCreativeList;
 	static std::unordered_map<std::string, std::unique_ptr<Item>> mItemLookupMap;
 	
@@ -368,15 +376,21 @@ public:
 	static Item* mCamera;	//_ZN4Item7mCameraE
 };
 
-template <typename ItemType,typename...Args>
-ItemType* registerItem(std::string const&name,int id,const Args&...rest)
-{
-	std::string const item_name = Util::toLowerCase(name);
-	if(Item::mItemLookupMap.count(item_name)!=0)
-		return (ItemType*)Item::mItems[id + 0x100];
-	
+template <typename ItemType, typename...Args>
+ItemType* registerItem(const std::string& name, short id, const Args&...rest) {
 	ItemType* new_instance = new ItemType(name,id,rest...);
-	Item::mItems[id + 0x100] = new_instance;
-	Item::mItemLookupMap.emplace(item_name,std::unique_ptr<Item>((Item*)new_instance));
-	return new_instance;
+	if(id < 512 && id >= 0)
+		Item::mItems[id] = new_instance;
+	else if(id > -512)
+		Item::mExtraItems[-id] = new_instance;
+	
+	/*std::string const item_name = Util::toLowerCase(name);
+	Item::mItemLookupMap[item_name] = std::unique_ptr<Item>((Item*)new_instance);*/
+	
+	if(id < 512 && id >= 0)
+		return (ItemType*) Item::mItems[id];
+	else if(id > -512)
+		return (ItemType*) Item::mExtraItems[-id];
+	else
+		return NULL;
 }

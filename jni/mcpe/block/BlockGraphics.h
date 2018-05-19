@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <memory>
 #include "../util/Color.h"
 #include "../math/AABB.h"
 #include "../client/renderer/TextureAtlasItem.h"
@@ -45,23 +46,22 @@ public:
 
 	// virtual
 	virtual ~BlockGraphics();
-	virtual bool shouldRenderFace(BlockSource&, BlockPos const&, signed char, AABB const&) const;
 	virtual int getIconYOffset() const;
 	virtual unsigned int getColor(int) const;
-	virtual unsigned int getColor(BlockSource&, BlockPos const&) const;
-	virtual unsigned int getColorForParticle(BlockSource&, BlockPos const&, int) const;
-	virtual bool isSeasonTinted(BlockSource&, BlockPos const&) const;
+	virtual unsigned int getColor(BlockSource&, const BlockPos&) const;
+	virtual unsigned int getColorForParticle(BlockSource&, const BlockPos&, int) const;
+	virtual bool isSeasonTinted(BlockSource&, const BlockPos&) const;
 	virtual void onGraphicsModeChanged(bool, bool);
-	virtual BlockRenderLayer getRenderLayer(BlockSource&, BlockPos const&) const;
+	virtual BlockRenderLayer getRenderLayer(BlockSource&, const BlockPos&) const;
 	virtual void* getExtraRenderLayers();
-	virtual AABB const& getVisualShape(BlockSource&, BlockPos const&, AABB&, bool);
-	virtual AABB const& getVisualShape(unsigned char, AABB&, bool);
-	virtual void* getCarriedTexture(signed char, int) const;
-	virtual void animateTick(BlockSource&, BlockPos const&, Random&);
-	virtual Vec3 randomlyModifyPosition(BlockPos const&, int&) const;
-	virtual Vec3 randomlyModifyPosition(BlockPos const&) const;
-	virtual void setVisualShape(AABB const&);
-	virtual void setVisualShape(Vec3 const&, Vec3 const&);
+	virtual AABB const& getVisualShape(BlockSource&, const BlockPos&, AABB&, bool) const;
+	virtual AABB const& getVisualShape(unsigned char, AABB&, bool) const;
+	virtual void* getCarriedTexture(unsigned int, int) const;
+	virtual void animateTick(BlockSource&, const BlockPos&, Random&);
+	virtual Vec3 randomlyModifyPosition(const BlockPos&, int&) const;
+	virtual Vec3 randomlyModifyPosition(const BlockPos&) const;
+	virtual void setVisualShape(const AABB&);
+	virtual void setVisualShape(const Vec3&, const Vec3&);
 
 	// non virtual
 	BlockGraphics(std::string const&);
@@ -109,7 +109,7 @@ public:
 	// static fields
 	static float SIZE_OFFSET;
 	static std::shared_ptr<TextureAtlas> mTerrainTextureAtlas;
-	static BlockGraphics* mBlocks[];
+	static BlockGraphics* mBlocks[512];
 	static std::vector<std::unique_ptr<BlockGraphics>> mOwnedBlocks;
 	static std::unordered_map<std::string, BlockGraphics*> mBlockLookupMap;
 

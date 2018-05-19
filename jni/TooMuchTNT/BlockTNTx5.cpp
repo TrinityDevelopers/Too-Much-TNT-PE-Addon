@@ -1,6 +1,6 @@
 #include "BlockTNTx5.h"
 
-#include "mcpe/level/BlockSource.h"
+/*#include "mcpe/level/BlockSource.h"
 #include "mcpe/level/Level.h"
 #include "mcpe/item/ItemInstance.h"
 #include "mcpe/util/GameRules.h"
@@ -9,7 +9,7 @@
 #include "mcpe/entity/Entity.h"
 #include "mcpe/entity/PrimedTnt.h"
 #include "mcpe/level/BlockPos.h"
-#include "mcpe/inventory/Container.h"
+#include "mcpe/inventory/Container.h"*/
 
 #include "TooMuchTNT.h"
 #include "TntDef.h"
@@ -19,9 +19,9 @@ BlockTNTx5::BlockTNTx5(std::string asset, int id) :
 	
 	setCategory(CreativeItemCategory::ITEMS);
 	setDestroyTime(0.0F);
-	addBlockState((BlockState::BlockStates) 14, 1);
+	addBlockState((BlockState::BlockStates) 17, 1);
 }
-
+/*
 bool BlockTNTx5::dispense(BlockSource& region, Container& container, int slotId, const Vec3& pos, signed char sc) const {
 	Vec3 vecPos = Vec3(BlockPos(pos));
 	TooMuchTNT::tntDef = {TntType::TNTX5, TntStat::REGULAR};
@@ -63,4 +63,4 @@ void BlockTNTx5::destroy(BlockSource& region, const BlockPos& pos, int data, Ent
 			}
 		}
 	}
-}
+}*/

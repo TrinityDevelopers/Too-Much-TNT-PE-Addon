@@ -14,7 +14,7 @@
     <!-- metadata specifying the library name. must match Android.mk.-->
     <meta-data android:name="net.zhuoweizhang.mcpelauncher.api.nativelibname"
         android:value="com.virtualoso.toomuchtnt"/>
-	<meta-data android:name="net.zhuoweizhang.mcpelauncher.api.targetmcpeversion" android:value="1.2.1.1"/>
+	<meta-data android:name="net.zhuoweizhang.mcpelauncher.api.targetmcpeversion" android:value="1.2.13.60"/>
     </application>
 
 </manifest> 

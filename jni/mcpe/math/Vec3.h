@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Vec2.h"
 
 class BlockPos;
@@ -24,6 +26,7 @@ public:
 	float maxComponent() const;
 
 	std::string toString() const;
+	std::string toJsonString() const;
 
 	static Vec3 clamp(Vec3 const&, Vec3 const&, Vec3 const&);
 	static Vec3 clampAlongNormal(Vec3 const&, Vec3 const&, Vec3 const&, Vec3 const&, Vec3&);
